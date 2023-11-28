@@ -287,8 +287,9 @@ if !SA1 == 0
                 .remap
                     PHX
                     TYX
-                    LDA #$00
-                    STA.l !7FAF00,x
+                    LDA.l !sprite_load_table,x
+                    AND.b #$7F
+                    STA.l !sprite_load_table,x
                     PLX
                     JML .back
         endmacro
@@ -357,38 +358,41 @@ if !SA1 == 0 && !Disable255SpritesPerLevel == 0
 
     NSprite_FixY2:
         LDX $02
-        LDA #$00
-        STA.l !7FAF00,x
+        LDA.l !sprite_load_table,x
+        AND #$7F
+        STA.l !sprite_load_table,x
         JML $02A93B|!BankB ; rts
 
     ClearIt:
         LDX #$FF
         LDA #$00
-        STA.l !7FAF00,x
-    -    STA.l !7FAF00-1,x
+        STA.l !sprite_load_table,x
+    -    STA.l !sprite_load_table-1,x
         DEX
         BNE -
         JML $02ABFA|!BankB
 
     CODE_02FAE9:
-        LDA #$00
-        STA.l !7FAF00,x
+        LDA.l !sprite_load_table,x
+        AND #$7F
+        STA.l !sprite_load_table,x
         PLX
         JML $02FAED|!BankB
 
     CODE_02A856:
-        LDA.l !7FAF00,x
-        BNE +
-        INC
-        STA.l !7FAF00,x
+        LDA.l !sprite_load_table,x
+        BMI +
+        ORA #$80
+        STA.l !sprite_load_table,x
         STX $02
         JML $02A860|!BankB
     +
         BRA SprtOffset
 
     CODE_02A8BB:
-        LDA #$00
-        STA.l !7FAF00,x
+        LDA.l !sprite_load_table,x
+        AND #$7F
+        STA.l !sprite_load_table,x
         ;BRA SprtOffset
 endif
 

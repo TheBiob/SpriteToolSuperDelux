@@ -100,12 +100,9 @@ endif
     PHX                     ;BlindEdit: houston we have a problem (preserve X)
     PHY                     ;preserve Y
     TYX                     ;transfer Y to X
-    LDA #$00 
-if !Disable255SpritesPerLevel
-    STA !1938,x
-else
-    STA.L !7FAF00,x         ;$41A800 in SA-1 ROM, so it can't be Y indexed!
-endif
+    LDA.l !sprite_load_table,x         ;$41A800 in SA-1 ROM, so it can't be Y indexed!
+    AND #$7F
+    STA.l !sprite_load_table,x         ;$41A800 in SA-1 ROM, so it can't be Y indexed!
     PLY                     ;restore Y
     PLX                     ;BlindEdit: alright back to the planning phase (restore X)
 
